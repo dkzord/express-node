@@ -1,26 +1,29 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
+
 // Middleware
-app.use('/add', (req, res, next) => {
-  res.send('<h1>Middleware type one</h1>');
+app.use('/add-product', (req, res, next) => {
+  res.send(`
+    <form action="/product" method="POST">
+      <input type="text" name="title" />
+      <button type="submit">Add product</button>
+    </form>
+  `);
 });
 
-app.use('/md', (req, res, next) => {
-  res.send('<h1>Middleware type two</h1>');
+app.post('/product', (req, res, next) => {
+  console.log(req.body);
+  res.redirect('/');
 });
 
-// Routes
-app.get('/', (req, res, next) => {
-  res.status(200).send('<h1>Main router</h1>');
+app.use('/', (req, res, next) => {
+  res.send('<h1>Hello from Express!</h1>');
 });
 
-app.get('/users', (req, res, next) => {
-  res.status(200).send('<h1>Users router</h1>');
-});
-
-// Server
-app.listen(3333, () => {
-  console.log('Server listening on port 3000');
+app.listen(3344, () => {
+  console.log('Server listening on port 3344');
 });
